@@ -44,13 +44,22 @@ public class BahaCrawler {
         ArrayList<Article> result = new ArrayList<>();
         String[] lines = html.split("\n");
         for(String line : lines) {
+            String url = "", name="";
             if(line.contains("FM-blist3") && !line.contains("FM-blist3A")) {
                 line = line.substring(line.indexOf("href=") + 6);
-                String url = line.substring(2, line.indexOf("\""));
-                String name = line.substring(line.indexOf(">") + 1, line.indexOf("</a>"));
-                Article article = new Article(name, url);
-                result.add(article);
+                url = line.substring(2, line.indexOf("\""));
+                name = line.substring(line.indexOf(">") + 1, line.indexOf("</a>"));
+            } else if(line.contains("b-list__main__title") && !line.contains("is-del")) {
+                line = line.replace(" is-highlight", "");
+                line = line.substring(line.indexOf("href=") + 6);
+                url = line.substring(0, line.indexOf("\""));
+                line = line.substring(line.indexOf("b-list__main__title"));
+                name = line.substring(21, line.indexOf("</a>"));
+            } else {
+                continue;
             }
+            Article article = new Article(name, url);
+            result.add(article);
         }
         guiMain.log.append("[Split completed!]\n");
         return result;

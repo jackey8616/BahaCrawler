@@ -23,7 +23,7 @@ public class Article {
     private URL url;
 
     public Article(String name, String url) throws Exception {
-        this(name, new URL("https://" + url));
+        this(name, new URL("https://" + (url.contains("forum.gamer.com.tw/") ? "" : "forum.gamer.com.tw/") + url));
     }
 
     public Article(String name, URL url) {
